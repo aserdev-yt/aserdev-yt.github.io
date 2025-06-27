@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="style.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Aserdev-site</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <h1>aserdev-site</h1>
+    <div style="text-align: center; margin-bottom: 1rem;">
+  <input type="text" id="searchInput" placeholder="Search videos 🔍" style="padding: 0.5rem; width: 50%;">
+</div>
+
+    <div class="grid" id="videoGrid"></div>
+
+<script>
+  fetch("videos.json")
+    .then((res) => res.json())
+    .then((videos) => {
+      const grid = document.getElementById("videoGrid");
+
+      videos.forEach((vid) => {
+        const name = vid.replace(".mp4", "");
+        const html = `
+          <a class="card" href="watch.html?id=${vid}">
+            <img src="thumbs/${name}.jpg" alt="${name}">
+            <p>${name}</p>
+          </a>`;
+        grid.insertAdjacentHTML("beforeend", html);
+      });
+
+      // ADD THIS: Enable search after cards are added
+      const searchInput = document.getElementById('searchInput');
+      searchInput.addEventListener('input', function () {
+        const searchTerm = this.value.toLowerCase();
+        const cards = document.querySelectorAll('.card');
+
+        cards.forEach(card => {
+          const text = card.textContent.toLowerCase();
+          card.style.display = text.includes(searchTerm) ? 'block' : 'none';
+        });
+      });
+    });
+</script>
+
+  </body>
+</html>
